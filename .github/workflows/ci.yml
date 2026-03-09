@@ -111,13 +111,18 @@ jobs:
             echo "Waiting for emulator to be ready..."
             adb wait-for-device
 
-            # Wait until boot animation completes (boot completed property = 1)
-            timeout 120 bash -c '
-              until [ "$(adb shell getprop sys.boot_completed 2>/dev/null | tr -d "\r")" = "1" ]; do
-                echo "  (waiting for sys.boot_completed)"; sleep 5
-              done
-            '
-            echo "Emulator boot complete."
+            # Poll sys.boot_completed using a plain while loop (sh-compatible)
+            BOOT_WAIT=0
+            while [ "$BOOT_WAIT" -lt 120 ]; do
+              BOOT_STATUS=$(adb shell getprop sys.boot_completed 2>/dev/null | tr -d '\r')
+              if [ "$BOOT_STATUS" = "1" ]; then
+                echo "Emulator boot complete."
+                break
+              fi
+              echo "  Waiting for boot... ($BOOT_WAIT s)"
+              sleep 5
+              BOOT_WAIT=$((BOOT_WAIT + 5))
+            done
 
             # Unlock the screen (prevents test failures due to lock screen)
             adb shell input keyevent 82
