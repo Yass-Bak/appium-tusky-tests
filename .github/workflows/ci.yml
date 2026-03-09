@@ -5,7 +5,7 @@ on:
     branches: [ main ]
   pull_request:
     branches: [ main ]
-  workflow_dispatch:        # Allow manual trigger from GitHub UI
+  workflow_dispatch:    # Manual trigger from GitHub UI
 
 jobs:
   test-and-report:
@@ -26,7 +26,7 @@ jobs:
           cache: 'maven'
 
       # ── 3. Restore previous Allure history (trend graphs) ─────────────────
-      - name: Restore Allure history
+      - name: Restore Allure history cache
         uses: actions/cache@v4
         with:
           path: .allure-history
@@ -35,15 +35,47 @@ jobs:
             allure-history-main
             allure-history-
 
-      # ── 4. Enable KVM for Android Emulator (required on ubuntu-latest) ────
+      # ── 4. Enable KVM for the Android Emulator ────────────────────────────
       - name: Enable KVM
         run: |
           echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
           sudo udevadm control --reload-rules
           sudo udevadm trigger --name-match=kvm
 
-      # ── 5. Start Android Emulator (API 29) ────────────────────────────────
-      - name: Start Android Emulator
+      # ── 5. Install Node.js (required for Appium) ──────────────────────────
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      # ── 6. Install Appium globally ────────────────────────────────────────
+      - name: Install Appium & UiAutomator2 driver
+        run: |
+          npm install -g appium@latest
+          appium driver install uiautomator2
+
+      # ── 7. Download Tusky APK ─────────────────────────────────────────────
+      - name: Download Tusky APK
+        run: |
+          mkdir -p apps
+          curl -L "https://github.com/tuskyapp/Tusky/releases/download/v26.1/Tusky-26.1.apk" \
+               -o apps/tusky.apk
+
+      # ── 8. Inject Allure history into results dir before run ──────────────
+      - name: Inject Allure history
+        run: |
+          mkdir -p target/allure-results/history
+          if [ -d .allure-history ] && [ "$(ls -A .allure-history 2>/dev/null)" ]; then
+            cp -r .allure-history/. target/allure-results/history/
+            echo "Allure history restored."
+          else
+            echo "No prior history found — this is the first run."
+          fi
+
+      # ── 9. Start Appium, run tests, generate report (inside emulator) ─────
+      #   NOTE: android-emulator-runner keeps the emulator alive only while
+      #         the `script` block executes. All test steps live here.
+      - name: Run Appium Tests on Android Emulator
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: 29
@@ -52,51 +84,29 @@ jobs:
           avd-name: android_emulator
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim
           disable-animations: true
+          script: |
+            echo "Starting Appium server in background..."
+            appium --log appium-server.log &
+            sleep 8
 
-      # ── 6. Install Appium & UiAutomator2 driver ───────────────────────────
-      - name: Install Appium & UiAutomator2
-        run: |
-          npm install -g appium@latest
-          appium driver install uiautomator2
-          appium &
-          sleep 5
+            echo "Running tests..."
+            mvn surefire:test || true
 
-      # ── 7. Download Tusky APK ─────────────────────────────────────────────
-      - name: Download Tusky APK
-        run: |
-          mkdir -p apps
-          curl -L "https://github.com/tuskyapp/Tusky/releases/download/v26.1/Tusky-26.1.apk" -o apps/tusky.apk
+            echo "Generating Allure report..."
+            mvn allure:report
 
-      # ── 8. Copy Allure history into results directory before run ──────────
-      - name: Inject Allure history into results
-        run: |
-          mkdir -p target/allure-results/history
-          if [ -d .allure-history ] && [ "$(ls -A .allure-history)" ]; then
-            cp -r .allure-history/. target/allure-results/history/
-            echo "Restored Allure history"
-          else
-            echo "No Allure history found — first run"
-          fi
-
-      # ── 9. Run tests (failures tolerated, report still generates) ─────────
-      - name: Run Appium Tests
-        run: mvn surefire:test -Dsurefire.failIfNoSpecifiedTests=false || true
-
-      # ── 10. Generate Allure report ────────────────────────────────────────
-      - name: Generate Allure Report
-        run: mvn allure:report
-
-      # ── 11. Backup Allure history for the next run ────────────────────────
+      # ── 10. Backup Allure history for the next run ────────────────────────
       - name: Backup Allure history
+        if: always()
         run: |
           mkdir -p .allure-history
           if [ -d target/site/allure-maven-plugin/history ]; then
             cp -r target/site/allure-maven-plugin/history/. .allure-history/
-            echo "Saved Allure history"
+            echo "Allure history saved."
           fi
 
-      # ── 12. Upload raw allure results as artifact ─────────────────────────
-      - name: Upload Allure Results
+      # ── 11. Upload Allure Results as a downloadable artifact ──────────────
+      - name: Upload Allure Results artifact
         uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -104,7 +114,7 @@ jobs:
           path: target/allure-results
           retention-days: 30
 
-      # ── 13. Deploy Allure HTML report to GitHub Pages ─────────────────────
+      # ── 12. Deploy Allure HTML report to GitHub Pages ─────────────────────
       - name: Deploy Allure Report to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         if: github.ref == 'refs/heads/main'
@@ -112,4 +122,4 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: target/site/allure-maven-plugin
           publish_branch: gh-pages
-          commit_message: "ci: update Allure report for commit ${{ github.sha }}"
+          commit_message: "ci: update Allure report [${{ github.sha }}]"
