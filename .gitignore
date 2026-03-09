@@ -1,0 +1,12 @@
+target/
+.allure-history/
+.allure/
+logs/
+*.log
+*.class
+*.jar
+.idea/
+*.iml
+.DS_Store
+Thumbs.db
+apps/
