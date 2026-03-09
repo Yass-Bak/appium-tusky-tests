@@ -73,44 +73,53 @@ jobs:
             echo "First run - no prior history."
           fi
 
-      # 9. Run everything inside the emulator lifetime
-      #    android-emulator-runner keeps the emulator alive only during the script block
+      # 9. Write the test-runner bash script to disk
+      #    (android-emulator-runner runs each script: line in its own sh -c,
+      #     so multi-line constructs must live in a real file)
+      - name: Create test runner script
+        run: |
+          cat > /tmp/run-tests.sh << 'SCRIPT'
+          #!/usr/bin/env bash
+          set -euo pipefail
+
+          echo "=== Starting Appium server ==="
+          appium --log appium-server.log &
+
+          echo "=== Waiting for Appium to be ready (max 60 s) ==="
+          TIMEOUT=60
+          ELAPSED=0
+          until curl -sf http://127.0.0.1:4723/status > /dev/null 2>&1; do
+            if [ "$ELAPSED" -ge "$TIMEOUT" ]; then
+              echo "ERROR: Appium did not start within ${TIMEOUT}s" >&2
+              cat appium-server.log >&2
+              exit 1
+            fi
+            sleep 3
+            ELAPSED=$((ELAPSED + 3))
+          done
+          echo "=== Appium ready after ${ELAPSED}s ==="
+
+          echo "=== Running Maven tests ==="
+          mvn test || true
+
+          echo "=== Shutting down emulator ==="
+          adb -s emulator-5554 emu kill || true
+          SCRIPT
+          chmod +x /tmp/run-tests.sh
+
+      # 10. Run the script inside the emulator lifetime
       - name: Run Appium Tests on Android Emulator
+        timeout-minutes: 25
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: 29
           arch: x86_64
           profile: Nexus 6
           avd-name: android_emulator
+          emulator-boot-timeout: 300
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim
           disable-animations: true
-          script-timeout: 20        # ← fail the job if the script block runs > 20 min
-          script: |
-            # ── Wait for Appium to be ready (max 60 s) ──────────────────
-            echo "Starting Appium server in background..."
-            appium --log appium-server.log &
-
-            echo "Waiting for Appium to be ready..."
-            APPIUM_TIMEOUT=60
-            ELAPSED=0
-            until curl -sf http://127.0.0.1:4723/status > /dev/null 2>&1; do
-              if [ $ELAPSED -ge $APPIUM_TIMEOUT ]; then
-                echo "ERROR: Appium did not start within ${APPIUM_TIMEOUT}s" >&2
-                cat appium-server.log >&2
-                exit 1
-              fi
-              sleep 3
-              ELAPSED=$((ELAPSED + 3))
-            done
-            echo "Appium ready after ${ELAPSED}s."
-
-            # ── Run tests + generate Allure report in one pass ──────────
-            echo "Running tests..."
-            mvn test || true
-
-            # ── Shut down emulator cleanly ──────────────────────────────
-            export ANDROID_EMULATOR_WAIT_TIME_BEFORE_KILL=0
-            adb -s emulator-5554 emu kill || true
+          script: bash /tmp/run-tests.sh
 
       # 10. Backup Allure history for the next run
       - name: Backup Allure history
