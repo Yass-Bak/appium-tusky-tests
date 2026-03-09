@@ -95,12 +95,10 @@ jobs:
             echo "Generating Allure report..."
             mvn allure:report
 
-            # Signal emulator to stop, then force-kill the process so the
-            # android-emulator-runner teardown finds it already dead (skips 20s wait)
+            # Signal emulator to shutdown - the env var ensures the runner
+            # teardown does NOT wait the default 20 seconds for the process to die
+            export ANDROID_EMULATOR_WAIT_TIME_BEFORE_KILL=0
             adb -s emulator-5554 emu kill || true
-            sleep 1
-            pkill -9 -f "qemu-system" || true
-            pkill -9 -f "emulator64" || true
 
       # 10. Backup Allure history for the next run
       - name: Backup Allure history
