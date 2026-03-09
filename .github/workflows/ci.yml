@@ -101,9 +101,6 @@ jobs:
 
           echo "=== Running Maven tests ==="
           mvn test || true
-
-          echo "=== Shutting down emulator ==="
-          adb -s emulator-5554 emu kill || true
           SCRIPT
           chmod +x /tmp/run-tests.sh
 
