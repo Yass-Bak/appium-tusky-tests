@@ -1,16 +1,7 @@
 package utils;
 
-import base.BaseTest;
-import io.qameta.allure.Allure;
-import org.openqa.selenium.OutputType;
-import org.openqa.selenium.TakesScreenshot;
 import org.testng.ITestListener;
 import org.testng.ITestResult;
-
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.nio.file.Files;
-import java.util.Base64;
 
 public class TestListener implements ITestListener {
 

@@ -12,7 +12,7 @@ import io.qameta.allure.Allure;
  */
 public class RetryAnalyzer implements IRetryAnalyzer {
     private int retryCount = 0;
-    private static final int maxRetryCount = 3;
+    private static final int maxRetryCount = 1;
     private static final Logger logger = LogManager.getLogger(RetryAnalyzer.class);
 
     @Override

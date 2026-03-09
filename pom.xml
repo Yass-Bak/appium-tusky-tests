@@ -81,6 +81,10 @@
                 <version>3.2.2</version>
                 <configuration>
                     <testFailureIgnore>true</testFailureIgnore>
+                    <!-- Kill any single test that runs beyond 2 minutes -->
+                    <timeout>120</timeout>
+                    <!-- Kill the forked JVM after 3 minutes if it doesn't exit cleanly -->
+                    <forkedProcessExitTimeoutInSeconds>180</forkedProcessExitTimeoutInSeconds>
                     <properties>
                         <property>
                             <name>listener</name>
