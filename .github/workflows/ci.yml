@@ -1,24 +1,23 @@
-name: Appium Tusky CI — Test & Publish Allure Report
+name: Appium Tusky CI - Test & Publish Allure Report
 
 on:
   push:
     branches: [ main ]
   pull_request:
     branches: [ main ]
-  workflow_dispatch:
+  workflow_dispatch:    # Manual trigger from GitHub UI
 
 jobs:
   test-and-report:
     name: Run Tests & Publish Allure Report
     runs-on: ubuntu-latest
-    timeout-minutes: 45      # Hard cap — kills the job if something hangs
 
     steps:
-      # ── 1. Checkout ────────────────────────────────────────────────────────
+      # 1. Checkout source code
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # ── 2. Java 17 ─────────────────────────────────────────────────────────
+      # 2. Set up Java 17
       - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
@@ -26,13 +25,13 @@ jobs:
           distribution: 'temurin'
           cache: 'maven'
 
-      # ── 3. Node.js for Appium ──────────────────────────────────────────────
+      # 3. Set up Node.js (required for Appium)
       - name: Set up Node.js 20
         uses: actions/setup-node@v4
         with:
           node-version: '20'
 
-      # ── 4. Restore Allure history (trend graphs) ───────────────────────────
+      # 4. Restore previous Allure history (trend graphs)
       - name: Restore Allure history
         uses: actions/cache@v4
         with:
@@ -42,121 +41,69 @@ jobs:
             allure-history-main
             allure-history-
 
-      # ── 5. Cache AVD image (saves ~3 min on every run after first) ─────────
-      - name: Cache Android AVD
-        uses: actions/cache@v4
-        id: avd-cache
-        with:
-          path: |
-            ~/.android/avd/*
-            ~/.android/adb*
-          key: avd-api29-x86_64-${{ runner.os }}
-
-      # ── 6. Create AVD (only if cache missed) ──────────────────────────────
-      - name: Create AVD (cache miss only)
-        if: steps.avd-cache.outputs.cache-hit != 'true'
-        uses: reactivecircus/android-emulator-runner@v2
-        with:
-          api-level: 29
-          arch: x86_64
-          profile: Nexus 6
-          force-avd-creation: false
-          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
-          disable-animations: false
-          script: echo "AVD created and cached."
-
-      # ── 7. Enable KVM ──────────────────────────────────────────────────────
+      # 5. Enable KVM for the Android Emulator
       - name: Enable KVM
         run: |
           echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
           sudo udevadm control --reload-rules
           sudo udevadm trigger --name-match=kvm
 
-      # ── 8. Install Appium (cached via npm) ────────────────────────────────
-      - name: Install Appium & UiAutomator2
+      # 6. Install Appium globally
+      - name: Install Appium and UiAutomator2 driver
         run: |
           npm install -g appium@latest
           appium driver install uiautomator2
 
-      # ── 9. Download Tusky APK ──────────────────────────────────────────────
+      # 7. Download Tusky APK
       - name: Download Tusky APK
         run: |
           mkdir -p apps
-          curl -L "https://github.com/tuskyapp/Tusky/releases/download/v26.1/Tusky-26.1.apk" \
-               -o apps/tusky.apk
+          curl -L "https://github.com/tuskyapp/Tusky/releases/download/v26.1/Tusky-26.1.apk" -o apps/tusky.apk
 
-      # ── 10. Inject Allure history ──────────────────────────────────────────
-      - name: Inject Allure history into results directory
+      # 8. Inject prior Allure history into results directory
+      - name: Inject Allure history
         run: |
           mkdir -p target/allure-results/history
           if [ -d .allure-history ] && [ "$(ls -A .allure-history 2>/dev/null)" ]; then
             cp -r .allure-history/. target/allure-results/history/
-            echo "Restored prior Allure history."
+            echo "Allure history restored."
           else
-            echo "First run — no prior history."
+            echo "First run - no prior history."
           fi
 
-      # ── 11. Run everything inside the emulator lifetime ───────────────────
+      # 9. Run everything inside the emulator lifetime
+      #    android-emulator-runner keeps the emulator alive only during the script block
       - name: Run Appium Tests on Android Emulator
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: 29
           arch: x86_64
           profile: Nexus 6
-          force-avd-creation: false
-          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          avd-name: android_emulator
+          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim
           disable-animations: true
           script: |
-            # Wait until the emulator is fully booted
-            echo "Waiting for emulator to be ready..."
-            adb wait-for-device
+            echo "Starting Appium server in background..."
+            appium --log appium-server.log &
+            sleep 8
 
-            # Poll sys.boot_completed using a plain while loop (sh-compatible)
-            BOOT_WAIT=0
-            while [ "$BOOT_WAIT" -lt 120 ]; do
-              BOOT_STATUS=$(adb shell getprop sys.boot_completed 2>/dev/null | tr -d '\r')
-              if [ "$BOOT_STATUS" = "1" ]; then
-                echo "Emulator boot complete."
-                break
-              fi
-              echo "  Waiting for boot... ($BOOT_WAIT s)"
-              sleep 5
-              BOOT_WAIT=$((BOOT_WAIT + 5))
-            done
+            echo "Running tests..."
+            mvn surefire:test || true
 
-            # Unlock the screen (prevents test failures due to lock screen)
-            adb shell input keyevent 82
-            adb shell input keyevent 3
-            sleep 2
-
-            # Start Appium in background and wait for it to be ready
-            echo "Starting Appium server..."
-            appium --log appium-server.log --base-path / &
-            timeout 30 bash -c 'until curl -sf http://127.0.0.1:4723/status; do sleep 2; done'
-            echo "Appium ready."
-
-            # Run tests — maven surefire timeouts prevent hanging tests
-            echo "Running Maven tests..."
-            mvn surefire:test \
-              -Dsurefire.failIfNoSpecifiedTests=false \
-              -Dsurefire.timeout=120 \
-              || true
-
-            # Generate Allure HTML report
             echo "Generating Allure report..."
             mvn allure:report
 
-      # ── 12. Backup Allure history ──────────────────────────────────────────
-      - name: Backup Allure history for next run
+      # 10. Backup Allure history for the next run
+      - name: Backup Allure history
         if: always()
         run: |
           mkdir -p .allure-history
           if [ -d target/site/allure-maven-plugin/history ]; then
             cp -r target/site/allure-maven-plugin/history/. .allure-history/
-            echo "History saved."
+            echo "Allure history saved."
           fi
 
-      # ── 13. Upload raw Allure results as artifact ─────────────────────────
+      # 11. Upload raw Allure results as a downloadable artifact
       - name: Upload Allure Results artifact
         uses: actions/upload-artifact@v4
         if: always()
@@ -165,7 +112,7 @@ jobs:
           path: target/allure-results
           retention-days: 30
 
-      # ── 14. Upload Appium server log for debugging ────────────────────────
+      # 12. Upload Appium server log for debugging
       - name: Upload Appium server log
         uses: actions/upload-artifact@v4
         if: always()
@@ -174,7 +121,7 @@ jobs:
           path: appium-server.log
           retention-days: 7
 
-      # ── 15. Deploy Allure HTML to GitHub Pages ────────────────────────────
+      # 13. Deploy Allure HTML report to GitHub Pages
       - name: Deploy Allure Report to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         if: github.ref == 'refs/heads/main'
