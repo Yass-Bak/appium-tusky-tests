@@ -11,6 +11,8 @@ jobs:
   test-and-report:
     name: Run Tests & Publish Allure Report
     runs-on: ubuntu-latest
+    env:
+      ANDROID_EMULATOR_WAIT_TIME_BEFORE_KILL: 0  # Skip graceful wait, kill immediately
 
     steps:
       # 1. Checkout source code
@@ -92,6 +94,9 @@ jobs:
 
             echo "Generating Allure report..."
             mvn allure:report
+
+            # Force-kill the emulator immediately to prevent hanging teardown
+            adb -s emulator-5554 emu kill || true
 
       # 10. Backup Allure history for the next run
       - name: Backup Allure history
