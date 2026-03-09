@@ -99,8 +99,11 @@ jobs:
           done
           echo "=== Appium ready after ${ELAPSED}s ==="
 
-          echo "=== Running Maven tests ==="
-          mvn test || true
+          echo "=== Running tests (15 min hard timeout) ==="
+          timeout 900 mvn surefire:test || true
+
+          echo "=== Generating Allure report ==="
+          mvn allure:report || true
           SCRIPT
           chmod +x /tmp/run-tests.sh
 
