@@ -18,6 +18,9 @@
         <log4j.version>2.20.0</log4j.version>
         <allure.version>2.24.0</allure.version>
         <aspectj.version>1.9.20.1</aspectj.version>
+        <argLine />  <!-- Keeping this to satisfy surefire default -->
+        <extra.jvm.args />
+        <javaagent.allure>-javaagent:"${settings.localRepository}/org/aspectj/aspectjweaver/${aspectj.version}/aspectjweaver-${aspectj.version}.jar"</javaagent.allure>
     </properties>
 
     <dependencies>
@@ -96,7 +99,7 @@
                         <suiteXmlFile>testng.xml</suiteXmlFile>
                     </suiteXmlFiles>
                     <argLine>
-                        @{argLine} -javaagent:"${settings.localRepository}/org/aspectj/aspectjweaver/${aspectj.version}/aspectjweaver-${aspectj.version}.jar"
+                        ${javaagent.allure} ${extra.jvm.args}
                     </argLine>
                     <systemPropertyVariables>
                         <allure.results.directory>${project.build.directory}/allure-results</allure.results.directory>
@@ -201,7 +204,7 @@
                         <artifactId>maven-surefire-plugin</artifactId>
                         <configuration>
                             <argLine>
-                                ${argLine} -javaagent:"${com.browserstack:browserstack-java-sdk:jar}"
+                                -javaagent:"${com.browserstack:browserstack-java-sdk:jar}" ${javaagent.allure} ${extra.jvm.args}
                             </argLine>
                         </configuration>
                     </plugin>
