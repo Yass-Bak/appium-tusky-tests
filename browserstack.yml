@@ -1,7 +1,7 @@
 userName: ${BROWSERSTACK_USERNAME}
 accessKey: ${BROWSERSTACK_ACCESS_KEY}
 framework: testng
-app: apps/tusky.apk
+app: TuskyApp
 platforms:
   - platformName: android
     deviceName: Samsung Galaxy S22 Ultra
