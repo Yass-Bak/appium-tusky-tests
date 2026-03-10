@@ -96,7 +96,7 @@
                         <suiteXmlFile>testng.xml</suiteXmlFile>
                     </suiteXmlFiles>
                     <argLine>
-                        -javaagent:"${settings.localRepository}/org/aspectj/aspectjweaver/${aspectj.version}/aspectjweaver-${aspectj.version}.jar"
+                        @{argLine} -javaagent:"${settings.localRepository}/org/aspectj/aspectjweaver/${aspectj.version}/aspectjweaver-${aspectj.version}.jar"
                     </argLine>
                     <systemPropertyVariables>
                         <allure.results.directory>${project.build.directory}/allure-results</allure.results.directory>
@@ -180,9 +180,32 @@
                 <dependency>
                     <groupId>com.browserstack</groupId>
                     <artifactId>browserstack-java-sdk</artifactId>
-                    <version>LATEST</version>
+                    <version>1.18.3</version>
                 </dependency>
             </dependencies>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>com.browserstack</groupId>
+                        <artifactId>browserstack-maven-plugin</artifactId>
+                        <version>1.18.3</version>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>bstack-setup</goal>
+                                </goals>
+                            </execution>
+                            <execution>
+                                <id>bstack-teardown</id>
+                                <phase>test</phase>
+                                <goals>
+                                    <goal>bstack-teardown</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
         </profile>
     </profiles>
 
