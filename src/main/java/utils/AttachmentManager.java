@@ -57,19 +57,25 @@ public class AttachmentManager {
     }
 
     /**
-     * Reads the Log4j2 execution log file and dumps the static text history
-     * accurately into the Allure report step history.
+     * Reads the specific Log4j2 execution log file for the current test
+     * and dumps the static text history into the Allure report step history.
      */
     public static void attachLogs() {
         try {
-            File logFile = new File("logs/appium-test.log");
+            String testName = org.apache.logging.log4j.ThreadContext.get("testName");
+            File logFile = new File("logs/test-" + testName + ".log");
+
+            if (!logFile.exists()) {
+                logFile = new File("logs/appium-default.log");
+            }
+
             if (logFile.exists()) {
                 byte[] logData = Files.readAllBytes(logFile.toPath());
-                Allure.addAttachment("Test Log Action History", "text/plain", new ByteArrayInputStream(logData),
+                Allure.addAttachment("Test Execution Log", "text/plain", new ByteArrayInputStream(logData),
                         ".log");
             }
         } catch (Exception e) {
-            logger.error("Failed to attach appium-test.log action history.", e);
+            logger.error("Failed to attach specific test log action history.", e);
         }
     }
 }

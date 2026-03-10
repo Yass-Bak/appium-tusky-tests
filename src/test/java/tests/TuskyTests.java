@@ -2,7 +2,6 @@ package tests;
 
 import base.BaseTest;
 import static io.qameta.allure.Allure.step;
-import org.testng.Assert;
 import org.testng.annotations.Test;
 import pages.ServerSelectionPage;
 
@@ -14,8 +13,10 @@ public class TuskyTests extends BaseTest {
         ServerSelectionPage serverPage = new ServerSelectionPage(driver);
 
         step("Step 2: Verify Server Instance Text Field is strictly visible");
-        Assert.assertTrue(serverPage.isServerInputVisible(),
+        softAssert.assertTrue(serverPage.isServerInputVisible(),
                 "Server instance text field should be visible right on launch.");
+
+        softAssert.assertAll();
     }
 
     @Test(priority = 2, description = "TC2 — Verify 'What's an instance?' helper link is visible", groups = "smoke")
@@ -24,8 +25,10 @@ public class TuskyTests extends BaseTest {
         ServerSelectionPage serverPage = new ServerSelectionPage(driver);
 
         step("Step 2: Check for helper text link presence on UI");
-        Assert.assertTrue(serverPage.isWhatsAnInstanceLinkVisible(),
+        softAssert.assertTrue(false, // INTENTIONAL FAILURE FOR DEMO
                 "The helper text link should be present on the UI.");
+
+        softAssert.assertAll();
     }
 
     @Test(priority = 3, description = "TC3 — Open More Options Menu", groups = "sanity")
@@ -37,11 +40,13 @@ public class TuskyTests extends BaseTest {
         serverPage.openMoreOptions();
 
         step("Step 3: Assert the dropdown menu pops up containing Login With Browser");
-        Assert.assertTrue(serverPage.isLoginWithBrowserMenuVisible(),
+        softAssert.assertTrue(serverPage.isLoginWithBrowserMenuVisible(),
                 "The login with browser option should appear in the overflow menu.");
 
         step("Step 4: Close menu by clicking back to reset state");
         driver.navigate().back();
+
+        softAssert.assertAll();
     }
 
     @Test(priority = 4, description = "TC4 — Enter Valid Server Domain", groups = "sanity")
@@ -53,6 +58,8 @@ public class TuskyTests extends BaseTest {
         serverPage.enterServerDomain("mastodon.social");
 
         step("Step 3: Acknowledge simulated text entry is visually processed");
+
+        softAssert.assertAll();
     }
 
     @Test(priority = 5, description = "TC5 — Click Login and Trigger Web Transition", groups = "sanity")
@@ -71,10 +78,12 @@ public class TuskyTests extends BaseTest {
             serverPage.waitForServerInputToDisappear();
 
             step("Step 5: Verify that Native Android fields are disabled/hidden during webview");
-            Assert.assertFalse(serverPage.isServerInputVisible(),
+            softAssert.assertFalse(serverPage.isServerInputVisible(),
                     "The server input page should have transitioned away after clicking Login.");
         } catch (Exception e) {
             System.out.println("Transition validation exception: " + e.getMessage());
         }
+
+        softAssert.assertAll();
     }
 }

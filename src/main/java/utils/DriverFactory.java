@@ -14,14 +14,21 @@ import java.time.Duration;
 public class DriverFactory {
 
     public static AndroidDriver createAndroidDriver() {
+        String env = System.getProperty("env", "local");
+
         try {
-            return new AndroidDriver(getClientConfig(), getUiAutomator2Options());
+            if ("browserstack".equalsIgnoreCase(env)) {
+                return new AndroidDriver(getBrowserStackClientConfig(), getBrowserStackOptions());
+            } else {
+                return new AndroidDriver(getLocalClientConfig(), getLocalUiAutomator2Options());
+            }
         } catch (Exception e) {
-            throw new RuntimeException("Failed to create AndroidDriver session: " + e.getMessage(), e);
+            throw new RuntimeException(
+                    "Failed to create AndroidDriver session for env '" + env + "': " + e.getMessage(), e);
         }
     }
 
-    private static UiAutomator2Options getUiAutomator2Options() {
+    private static UiAutomator2Options getLocalUiAutomator2Options() {
         UiAutomator2Options options = new UiAutomator2Options();
 
         options.setDeviceName("Android Emulator");
@@ -44,7 +51,28 @@ public class DriverFactory {
         return options;
     }
 
-    private static AppiumClientConfig getClientConfig() throws MalformedURLException {
+    private static AppiumClientConfig getLocalClientConfig() throws MalformedURLException {
+        return AppiumClientConfig.defaultConfig()
+                .baseUrl(new URL("http://127.0.0.1:4723/"))
+                .readTimeout(Duration.ofMinutes(3))
+                .connectionTimeout(Duration.ofMinutes(1));
+    }
+
+    private static UiAutomator2Options getBrowserStackOptions() {
+        UiAutomator2Options options = new UiAutomator2Options();
+        // The BrowserStack SDK uses browserstack.yml to inject the real devices and OS
+        // versions.
+        // We only need to provide the base Appium automation name here.
+        options.setAutomationName("UiAutomator2");
+        return options;
+    }
+
+    private static AppiumClientConfig getBrowserStackClientConfig() throws MalformedURLException {
+        // The BrowserStack SDK automatically routes the Appium connection to the
+        // BrowserStack Hub securely.
+        // We provide a dummy localhost URL here purely to satisfy the
+        // AppiumClientConfig builder,
+        // as the SDK will intercept and override this URL under the hood anyway.
         return AppiumClientConfig.defaultConfig()
                 .baseUrl(new URL("http://127.0.0.1:4723/"))
                 .readTimeout(Duration.ofMinutes(3))

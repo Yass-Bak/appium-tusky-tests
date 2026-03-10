@@ -7,45 +7,44 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.events.WebDriverListener;
 
-/**
- * AppiumListener class to log test start, success, failure, and skipped events
- */
 public class AppiumListener implements WebDriverListener {
 
     private static final Logger logger = LogManager.getLogger(AppiumListener.class);
 
     @Override
     public void beforeClick(WebElement element) {
-        logger.info("Ready to click on element: " + getElementDescription(element));
+        logger.info("[ACTION] About to click on element: " + getElementDescription(element));
     }
 
     @Override
     public void afterClick(WebElement element) {
-        logger.info("Successfully clicked on element: " + getElementDescription(element));
+        logger.info("[ACTION] Clicked on element: " + getElementDescription(element));
     }
 
     @Override
     public void beforeSendKeys(WebElement element, CharSequence... keysToSend) {
         if (keysToSend != null && keysToSend.length > 0) {
-            logger.info("Typing '" + keysToSend[0] + "' into element...");
+            logger.info("[ACTION] About to type text '" + keysToSend[0] + "' into element: "
+                    + getElementDescription(element));
         }
     }
 
     @Override
     public void afterSendKeys(WebElement element, CharSequence... keysToSend) {
         if (keysToSend != null && keysToSend.length > 0) {
-            logger.info("Successfully typed text into element!");
+            // Masking password logic can be added here if needed
+            logger.info("[ACTION] Typed text '" + keysToSend[0] + "' into element: " + getElementDescription(element));
         }
     }
 
     @Override
     public void beforeFindElement(WebDriver driver, By locator) {
-        logger.info("Searching for element by locator: " + locator.toString());
+        logger.info("[ACTION] Looking for element using locator: " + locator);
     }
 
     @Override
     public void afterFindElement(WebDriver driver, By locator, WebElement result) {
-        logger.info("Successfully found element.");
+        logger.info("[ACTION] Found element using locator: " + locator);
     }
 
     private String getElementDescription(WebElement element) {

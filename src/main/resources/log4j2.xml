@@ -5,21 +5,41 @@
     </Properties>
     <Appenders>
         <Console name="Console" target="SYSTEM_OUT">
-            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+            <PatternLayout pattern="%d{HH:mm:ss} [%t] %-5level - %msg%n"/>
         </Console>
+        
         <RollingFile name="File" fileName="${basePath}/appium-test.log"
-                     filePattern="${basePath}/appium-test-%d{yyyy-MM-dd}-%i.log">
+                     filePattern="${basePath}/appium-test-%d{yyyy-MM-dd}-%i.log" append="false">
             <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
             <Policies>
                 <SizeBasedTriggeringPolicy size="10MB"/>
             </Policies>
             <DefaultRolloverStrategy max="5"/>
         </RollingFile>
+        
+        <!-- Routes logs to a specific file based on the test name -->
+        <Routing name="PerTestFileAppender">
+            <Routes pattern="$${ctx:testName}">
+                <!-- Default route if testName is not set -->
+                <Route key="$${ctx:testName}">
+                    <File name="DefaultFile" fileName="${basePath}/appium-default.log" append="false">
+                        <PatternLayout pattern="%d{HH:mm:ss.SSS} %-5level %logger{36} - %msg%n"/>
+                    </File>
+                </Route>
+                <!-- Dynamic route based on ThreadContext testName key -->
+                <Route>
+                    <File name="File-${ctx:testName}" fileName="${basePath}/test-${ctx:testName}.log" append="false">
+                        <PatternLayout pattern="%d{HH:mm:ss.SSS} %-5level - %msg%n"/>
+                    </File>
+                </Route>
+            </Routes>
+        </Routing>
     </Appenders>
     <Loggers>
         <Root level="info">
             <AppenderRef ref="Console"/>
             <AppenderRef ref="File"/>
+            <AppenderRef ref="PerTestFileAppender"/>
         </Root>
     </Loggers>
 </Configuration>

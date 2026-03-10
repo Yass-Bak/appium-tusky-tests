@@ -59,6 +59,7 @@
             <artifactId>allure-testng</artifactId>
             <version>${allure.version}</version>
         </dependency>
+
     </dependencies>
 
     <build>
@@ -164,4 +165,25 @@
             </plugin>
         </plugins>
     </build>
+
+    <profiles>
+        <profile>
+            <id>local</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+        </profile>
+        
+        <profile>
+            <id>bstack</id>
+            <dependencies>
+                <dependency>
+                    <groupId>com.browserstack</groupId>
+                    <artifactId>browserstack-java-sdk</artifactId>
+                    <version>LATEST</version>
+                </dependency>
+            </dependencies>
+        </profile>
+    </profiles>
+
 </project>
