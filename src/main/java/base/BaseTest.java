@@ -13,6 +13,11 @@ import utils.TestListener;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.Duration;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 @Listeners(TestListener.class)
 public class BaseTest {
@@ -32,11 +37,37 @@ public class BaseTest {
 
         options.setAppPackage("com.keylesspalace.tusky");
         options.setAppActivity("com.keylesspalace.tusky.MainActivity");
-        options.setNoReset(false); // Changed to false to wipe the OAuth browser state from previous runs
+        options.setNoReset(false); // Wipe app state so OAuth browser cache doesn't persist
         options.setNewCommandTimeout(Duration.ofSeconds(30));
 
+        // ── Session-creation timeouts (prevent infinite hang on slow CI emulators) ──
+        // How long to wait for APK installation to finish (ms)
+        options.setCapability("appium:androidInstallTimeout", 90000);
+        // How long to wait for UiAutomator2 server APK to be installed on device (ms)
+        options.setCapability("appium:uiautomator2ServerInstallTimeout", 60000);
+        // How long to wait for UiAutomator2 server to launch and be ready (ms)
+        options.setCapability("appium:uiautomator2ServerLaunchTimeout", 60000);
+        // How long any single ADB command may take before being considered hung (ms)
+        options.setCapability("appium:adbExecTimeout", 60000);
+
         try {
-            androidDriver = new AndroidDriver(new URL("http://127.0.0.1:4723/"), options);
+            // Wrap session creation in a 2-minute Future so a hung emulator
+            // fails fast with a clear error instead of hanging indefinitely
+            ExecutorService executor = Executors.newSingleThreadExecutor();
+            try {
+                final UiAutomator2Options finalOptions = options;
+                Future<AndroidDriver> future = executor.submit(
+                        () -> new AndroidDriver(new URL("http://127.0.0.1:4723/"), finalOptions));
+                androidDriver = future.get(120, TimeUnit.SECONDS);
+            } catch (TimeoutException e) {
+                throw new RuntimeException(
+                        "AndroidDriver session creation timed out after 120s — emulator may be unresponsive", e);
+            } catch (Exception e) {
+                throw new RuntimeException("Failed to create AndroidDriver session", e);
+            } finally {
+                executor.shutdownNow();
+            }
+
             androidDriver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
 
             // Start recording the screen for the test

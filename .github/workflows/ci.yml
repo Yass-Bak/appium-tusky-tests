@@ -100,7 +100,7 @@ jobs:
           echo "=== Appium ready after ${ELAPSED}s ==="
 
           echo "=== Running tests (15 min hard timeout) ==="
-          timeout 900 mvn surefire:test || true
+          timeout --kill-after=60 900 mvn surefire:test || true
 
           echo "=== Generating Allure report ==="
           mvn allure:report || true
@@ -112,12 +112,12 @@ jobs:
         timeout-minutes: 25
         uses: reactivecircus/android-emulator-runner@v2
         with:
-          api-level: 29
+          api-level: 28
           arch: x86_64
-          profile: Nexus 6
+          profile: pixel_2
           avd-name: android_emulator
           emulator-boot-timeout: 300
-          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim
+          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -memory 2048
           disable-animations: true
           script: bash /tmp/run-tests.sh
 
