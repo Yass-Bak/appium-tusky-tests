@@ -180,29 +180,30 @@
                 <dependency>
                     <groupId>com.browserstack</groupId>
                     <artifactId>browserstack-java-sdk</artifactId>
-                    <version>1.18.3</version>
+                    <version>1.53.5</version>
                 </dependency>
             </dependencies>
             <build>
                 <plugins>
                     <plugin>
-                        <groupId>com.browserstack</groupId>
-                        <artifactId>browserstack-maven-plugin</artifactId>
-                        <version>1.18.3</version>
+                        <artifactId>maven-dependency-plugin</artifactId>
                         <executions>
                             <execution>
+                                <id>getClasspathFilenames</id>
                                 <goals>
-                                    <goal>bstack-setup</goal>
-                                </goals>
-                            </execution>
-                            <execution>
-                                <id>bstack-teardown</id>
-                                <phase>test</phase>
-                                <goals>
-                                    <goal>bstack-teardown</goal>
+                                    <goal>properties</goal>
                                 </goals>
                             </execution>
                         </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <configuration>
+                            <argLine>
+                                @{argLine} -javaagent:"${com.browserstack:browserstack-java-sdk:jar}"
+                            </argLine>
+                        </configuration>
                     </plugin>
                 </plugins>
             </build>
