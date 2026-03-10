@@ -10,7 +10,7 @@ public class TuskyTests extends BaseTest {
     @Test(priority = 1, description = "TC1 — Verify Tusky launches successfully to Server Selection", groups = "smoke")
     public void testAppLaunch() {
         step("Step 1: Launch application and initialize Server Selection Page");
-        ServerSelectionPage serverPage = new ServerSelectionPage(driver);
+        ServerSelectionPage serverPage = new ServerSelectionPage(getDriver());
 
         step("Step 2: Verify Server Instance Text Field is strictly visible");
         softAssert.assertTrue(serverPage.isServerInputVisible(),
@@ -22,7 +22,7 @@ public class TuskyTests extends BaseTest {
     @Test(priority = 2, description = "TC2 — Verify 'What's an instance?' helper link is visible", groups = "smoke")
     public void testWhatsAnInstanceLink() {
         step("Step 1: Initialize Server Selection Page");
-        ServerSelectionPage serverPage = new ServerSelectionPage(driver);
+        ServerSelectionPage serverPage = new ServerSelectionPage(getDriver());
 
         step("Step 2: Check for helper text link presence on UI");
         softAssert.assertTrue(false, // INTENTIONAL FAILURE FOR DEMO
@@ -34,7 +34,7 @@ public class TuskyTests extends BaseTest {
     @Test(priority = 3, description = "TC3 — Open More Options Menu", groups = "sanity")
     public void testMoreOptionsMenu() {
         step("Step 1: Focus on Server Selection Page");
-        ServerSelectionPage serverPage = new ServerSelectionPage(driver);
+        ServerSelectionPage serverPage = new ServerSelectionPage(getDriver());
 
         step("Step 2: Open More Options Overflow Menu");
         serverPage.openMoreOptions();
@@ -44,7 +44,7 @@ public class TuskyTests extends BaseTest {
                 "The login with browser option should appear in the overflow menu.");
 
         step("Step 4: Close menu by clicking back to reset state");
-        driver.navigate().back();
+        getDriver().navigate().back();
 
         softAssert.assertAll();
     }
@@ -52,7 +52,7 @@ public class TuskyTests extends BaseTest {
     @Test(priority = 4, description = "TC4 — Enter Valid Server Domain", groups = "sanity")
     public void testEnterValidServer() {
         step("Step 1: Initialize server page variables");
-        ServerSelectionPage serverPage = new ServerSelectionPage(driver);
+        ServerSelectionPage serverPage = new ServerSelectionPage(getDriver());
 
         step("Step 2: Simulate typing a valid domain (mastodon.social)");
         serverPage.enterServerDomain("mastodon.social");
@@ -65,7 +65,7 @@ public class TuskyTests extends BaseTest {
     @Test(priority = 5, description = "TC5 — Click Login and Trigger Web Transition", groups = "sanity")
     public void testClickLoginNavigatesToWeb() {
         step("Step 1: Load server DOM configuration");
-        ServerSelectionPage serverPage = new ServerSelectionPage(driver);
+        ServerSelectionPage serverPage = new ServerSelectionPage(getDriver());
 
         step("Step 2: Enter domain input (mastodon.social)");
         serverPage.enterServerDomain("mastodon.social");

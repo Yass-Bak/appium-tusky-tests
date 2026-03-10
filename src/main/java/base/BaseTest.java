@@ -24,9 +24,17 @@ import org.apache.logging.log4j.Logger;
 public class BaseTest {
     private static final Logger logger = LogManager.getLogger(BaseTest.class);
 
-    public static AndroidDriver androidDriver;
-    public static WebDriver driver;
+    public static ThreadLocal<AndroidDriver> androidDriver = new ThreadLocal<>();
+    public static ThreadLocal<WebDriver> driver = new ThreadLocal<>();
     protected StepSoftAssert softAssert;
+
+    public static AndroidDriver getAndroidDriver() {
+        return androidDriver.get();
+    }
+
+    public static WebDriver getDriver() {
+        return driver.get();
+    }
 
     @BeforeMethod
     public void setUp(Method method) {
@@ -35,34 +43,36 @@ public class BaseTest {
         logger.info("[ENV] Starting test execution: " + method.getName());
 
         logger.info("[ENV] Initializing AndroidDriver session...");
-        androidDriver = DriverFactory.createAndroidDriver();
+        androidDriver.set(DriverFactory.createAndroidDriver());
         logger.info("[ENV] AndroidDriver session established successfully.");
 
         softAssert = new StepSoftAssert();
 
-        androidDriver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+        getAndroidDriver().manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
 
         // Start recording the screen for the test
         try {
-            androidDriver.startRecordingScreen();
+            getAndroidDriver().startRecordingScreen();
         } catch (Exception e) {
             System.out.println("Warning: Screen recording not supported on this device - " + e.getMessage());
         }
 
         // Decorate the driver to intercept and log all interactions automatically
-        driver = new EventFiringDecorator<>(new AppiumListener()).decorate(androidDriver);
+        driver.set(new EventFiringDecorator<>(new AppiumListener()).decorate(getAndroidDriver()));
     }
 
     @AfterMethod(alwaysRun = true)
     public void tearDown(org.testng.ITestResult result) {
-        if (androidDriver != null) {
+        if (getAndroidDriver() != null) {
             logger.info("[ENV] Tearing down AndroidDriver session for test: " + result.getName());
             // Centralized Allure attachments handling separating logic from core setup
-            utils.AttachmentManager.attachScreenshot(androidDriver);
-            utils.AttachmentManager.attachVideo(androidDriver);
+            utils.AttachmentManager.attachScreenshot(getAndroidDriver());
+            utils.AttachmentManager.attachVideo(getAndroidDriver());
             utils.AttachmentManager.attachLogs();
 
-            androidDriver.quit();
+            getAndroidDriver().quit();
+            androidDriver.remove();
+            driver.remove();
             logger.info("[ENV] AndroidDriver successfully closed.");
             logger.info("======================================================");
         }

@@ -26,7 +26,7 @@ public class StepSoftAssert extends SoftAssert {
         Allure.step("ASSERTION FAILED: " + errorMsg, io.qameta.allure.model.Status.FAILED);
 
         // 2. Attach Screenshot at this exact moment
-        AttachmentManager.attachScreenshot(BaseTest.androidDriver);
+        AttachmentManager.attachScreenshot(BaseTest.getAndroidDriver());
 
         // 3. Attach the specific test log file
         String testName = ThreadContext.get("testName");
