@@ -16,7 +16,6 @@ Mobile Automation Framework built for the **Tusky Mastodon** Android application
 - **Cloud Run (BrowserStack)**: Automated integration with BrowserStack App Automate for executing tests on real devices (Samsung Galaxy S22, Pixel 8, OnePlus 11R).
 
 ![Opening](Docs/5.jpg)
-![Opening](Docs/6.jpg)
 
 ### 2. Intelligent CI/CD Pipeline
 - **GitHub Actions Integration**: Fully automated pipeline that handles:
