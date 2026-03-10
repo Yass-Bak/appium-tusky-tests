@@ -79,7 +79,7 @@ mvn clean test -P bstack -Denv=browserstack
 
 ---
 
-## Contact & Contributions
+## 📬 Contact & Contributions
 For any questions regarding the framework architecture or contribution guidelines, please feel free to reach me.
 
 ---
