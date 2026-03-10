@@ -10,7 +10,6 @@ import org.testng.annotations.Listeners;
 import utils.AppiumListener;
 import utils.TestListener;
 
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.Duration;
 import java.util.concurrent.ExecutorService;
@@ -50,39 +49,34 @@ public class BaseTest {
         // How long any single ADB command may take before being considered hung (ms)
         options.setCapability("appium:adbExecTimeout", 60000);
 
+        // Wrap session creation in a 2-minute Future so a hung emulator
+        // fails fast with a clear error instead of hanging indefinitely
+        ExecutorService executor = Executors.newSingleThreadExecutor();
         try {
-            // Wrap session creation in a 2-minute Future so a hung emulator
-            // fails fast with a clear error instead of hanging indefinitely
-            ExecutorService executor = Executors.newSingleThreadExecutor();
-            try {
-                final UiAutomator2Options finalOptions = options;
-                Future<AndroidDriver> future = executor.submit(
-                        () -> new AndroidDriver(new URL("http://127.0.0.1:4723/"), finalOptions));
-                androidDriver = future.get(120, TimeUnit.SECONDS);
-            } catch (TimeoutException e) {
-                throw new RuntimeException(
-                        "AndroidDriver session creation timed out after 120s — emulator may be unresponsive", e);
-            } catch (Exception e) {
-                throw new RuntimeException("Failed to create AndroidDriver session", e);
-            } finally {
-                executor.shutdownNow();
-            }
-
-            androidDriver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
-
-            // Start recording the screen for the test
-            try {
-                androidDriver.startRecordingScreen();
-            } catch (Exception e) {
-                System.out.println("Warning: Screen recording not supported on this device - " + e.getMessage());
-            }
-
-            // Decorate the driver to intercept and log all interactions automatically
-            driver = new EventFiringDecorator<>(new AppiumListener()).decorate(androidDriver);
-
-        } catch (MalformedURLException e) {
-            throw new RuntimeException("Appium server URL is invalid", e);
+            final UiAutomator2Options finalOptions = options;
+            Future<AndroidDriver> future = executor.submit(
+                    () -> new AndroidDriver(new URL("http://127.0.0.1:4723/"), finalOptions));
+            androidDriver = future.get(120, TimeUnit.SECONDS);
+        } catch (TimeoutException e) {
+            throw new RuntimeException(
+                    "AndroidDriver session creation timed out after 120s — emulator may be unresponsive", e);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to create AndroidDriver session", e);
+        } finally {
+            executor.shutdownNow();
         }
+
+        androidDriver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+
+        // Start recording the screen for the test
+        try {
+            androidDriver.startRecordingScreen();
+        } catch (Exception e) {
+            System.out.println("Warning: Screen recording not supported on this device - " + e.getMessage());
+        }
+
+        // Decorate the driver to intercept and log all interactions automatically
+        driver = new EventFiringDecorator<>(new AppiumListener()).decorate(androidDriver);
     }
 
     @AfterMethod(alwaysRun = true)
