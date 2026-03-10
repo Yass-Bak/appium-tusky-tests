@@ -100,7 +100,7 @@ jobs:
           echo "=== Appium ready after ${ELAPSED}s ==="
 
           echo "=== Running tests (15 min hard timeout) ==="
-          timeout --kill-after=60 900 mvn surefire:test || true
+          timeout --kill-after=60 900 mvn surefire:test -DforkCount=0 || true
 
           echo "=== Generating Allure report ==="
           mvn allure:report || true
