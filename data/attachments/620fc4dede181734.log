@@ -1,0 +1,21 @@
+06:06:32.138 INFO  - ======================================================
+06:06:32.140 INFO  - [ENV] Starting test execution: testEnterValidServer
+06:06:32.140 INFO  - [ENV] Initializing AndroidDriver session...
+06:06:51.708 INFO  - ======================================================
+06:06:51.709 INFO  - [ENV] Starting test execution: testEnterValidServer
+06:06:51.709 INFO  - [ENV] Initializing AndroidDriver session...
+06:06:52.911 INFO  - [ENV] AndroidDriver session established successfully.
+06:06:53.068 INFO  - [TEST] Test started: testEnterValidServer
+06:06:53.123 INFO  - [ACTION] Looking for element using locator: AppiumBy.id: com.keylesspalace.tusky:id/domainEditText
+06:06:53.218 INFO  - [ACTION] Found element using locator: AppiumBy.id: com.keylesspalace.tusky:id/domainEditText
+06:06:53.296 INFO  - [ACTION] About to type text 'mastodon.social' into element: 'Which instance?'
+06:06:53.897 INFO  - [ACTION] Typed text 'mastodon.social' into element: 'mastodon.social'
+06:06:54.636 INFO  - [TEST] Test passed: testEnterValidServer
+06:06:54.648 INFO  - [ENV] Tearing down AndroidDriver session for test: testEnterValidServer
+06:06:55.890 WARN  - Skipped Video Attachment (API < 27 devices do not support screen recording natively): An unknown error has occurred
+Build info: version: '4.13.0', revision: 'ba948ece5b*'
+System info: os.name: 'Linux', os.arch: 'amd64', os.version: '6.14.0-1017-azure', java.version: '17.0.18'
+Driver info: io.appium.java_client.android.AndroidDriver
+Command: [c270781faa5a781842fad531e5e897e090ce3aa6, stopRecordingScreen {}]
+Capabilities {appium:appActivity: com.keylesspalace.tusky.Mai..., appium:appPackage: com.keylesspalace.tusky, appium:automationName: uiautomator2, appium:bundleID: com.keylesspalace.tusky, appium:bundleId: com.keylesspalace.tusky, appium:chromedriverArgs: [--adb-port=5038], appium:chromedriverPorts: [[18177, 18187]], appium:databaseEnabled: false, appium:desired: {appActivity: com.keylesspalace.tusky.Mai..., appPackage: com.keylesspalace.tusky, automationName: uiautomator2, bstack:options: {buildIdentifier: #CI 22889460710, hostName: runnervm0kj6c, localIdentifier: Mar_10_0604_runnervm0kj6c_y8us}, bundleID: com.keylesspalace.tusky, bundleId: com.keylesspalace.tusky, chromedriverArgs: [--adb-port=5038], chromedriverPorts: [[18177, 18187]], deviceName: oneplus 11r, disableSuppressAccessibilityService: true, goog:chromeOptions: {}, nativeWebScreenshot: true, newCommandTimeout: 0, platformName: Android, skipServerInstallation: true, systemPort: 8207, udid: 2c1f0d4}, appium:deviceApiLevel: 33, appium:deviceManufacturer: OnePlus, appium:deviceModel: CPH2487, appium:deviceName: 2c1f0d4, appium:deviceScreenDensity: 560, appium:deviceScreenSize: 1240x2772, appium:deviceUDID: 2c1f0d4, appium:disableSuppressAccessibilityService: true, appium:javascriptEnabled: true, appium:locationContextEnabled: false, appium:nativeWebScreenshot: true, appium:networkConnectionEnabled: true, appium:newCommandTimeout: 0, appium:optimalHubUrl: hub-use.browserstack.com, appium:pixelRatio: 3.5, appium:platformVersion: 13, appium:skipServerInstallation: true, appium:statBarHeight: 110, appium:systemPort: 8207, appium:takesScreenshot: true, appium:udid: 2c1f0d4, appium:viewportRect: {height: 2398, left: 0, top: 110, width: 1240}, appium:warnings: {}, appium:webStorageEnabled: false, bstack:options: {buildIdentifier: #CI 22889460710, hostName: runnervm0kj6c, localIdentifier: Mar_10_0604_runnervm0kj6c_y8us}, goog:chromeOptions: {}, platformName: ANDROID}
+Session ID: c270781faa5a781842fad531e5e897e090ce3aa6
