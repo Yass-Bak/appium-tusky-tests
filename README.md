@@ -7,7 +7,7 @@ This project is a high-performance, industrial-grade Mobile Automation Framework
 
 ---
 
-## 🏗️ Architecture & Core Features
+## Architecture & Core Features
 
 ### 1. Hybrid Execution Engine
 - **Local Run**: Optimized for developer speed using local emulators (UiAutomator2).
@@ -27,30 +27,28 @@ This project is a high-performance, industrial-grade Mobile Automation Framework
 
 ---
 
-## 📊 Reporting Dashboard
+### Reporting Dashboard
 
 We use **Allure Report** to provide deep insights into test execution, trends, and stability.
 
-````carousel
-![Allure Dashboard - 100% Pass](C:/Users/souna/.gemini/antigravity/brain/366ee573-5589-4d36-82f7-178ab96d70e0/media__1773123676433.png)
-<!-- slide -->
-![Suites View - Successful Execution](C:/Users/souna/.gemini/antigravity/brain/366ee573-5589-4d36-82f7-178ab96d70e0/media__1773123676509.png)
-<!-- slide -->
-![Packages View - Test Breakdown](C:/Users/souna/.gemini/antigravity/brain/366ee573-5589-4d36-82f7-178ab96d70e0/media__1773123676467.png)
-````
+![Allure Dashboard - 100% Pass](Docs/Capture%20d'écran%202026-03-09%20075642.png)
+
+![Suites View - Successful Execution](Docs/Capture%20d'écran%202026-03-09%20075659.png)
+
+![Packages View - Test Breakdown](Docs/Capture%20d'écran%202026-03-09%20080534.png)
 
 ### Failure Analysis
 When a test fails, the framework captures the exact state of the application via high-resolution screenshots and detailed execution logs, enabling instant debugging.
 
-````carousel
-![Assertion Failure Details](C:/Users/souna/.gemini/antigravity/brain/366ee573-5589-4d36-82f7-178ab96d70e0/media__1773123676256.png)
-<!-- slide -->
-![Trend Matrix](C:/Users/souna/.gemini/antigravity/brain/366ee573-5589-4d36-82f7-178ab96d70e0/media__1773123676397.png)
-````
+![Assertion Failure Details](Docs/Capture%20d'écran%202026-03-10%20071009.png)
+
+![Trend Matrix](Docs/Capture%20d'écran%202026-03-10%20070929.png)
+
+![Categories View](Docs/Capture%20d'écran%202026-03-10%20071214.png)
 
 ---
 
-## 🚀 Getting Started
+## Getting Started
 
 ### Prerequisites
 - Java JDK 17+
@@ -72,7 +70,7 @@ mvn clean test -P bstack -Denv=browserstack
 
 ---
 
-## 🛠️ Best Practices Implemented
+## Best Practices Implemented
 
 - **Retry Logic**: Automatically retries flaky tests up to 3 times using a custom `AnnotationTransformer`.
 - **Parallel Execution Ready**: Thread-safe driver management for high-concurrency testing.
@@ -81,9 +79,9 @@ mvn clean test -P bstack -Denv=browserstack
 
 ---
 
-## 📬 Contact & Contributions
-For any questions regarding the framework architecture or contribution guidelines, please reach out to the maintainers.
+## Contact & Contributions
+For any questions regarding the framework architecture or contribution guidelines, please feel free to reach me.
 
 ---
 *Built with ❤️ and 🚬☕ for the mobile automation community.*
-⭐ B.Yassine
+                     ⭐ B.Yassine ⭐
