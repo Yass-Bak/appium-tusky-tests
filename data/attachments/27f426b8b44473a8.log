@@ -1,0 +1,12 @@
+08:20:58.856 INFO  - ======================================================
+08:20:58.875 INFO  - [ENV] Starting test execution: testWhatsAnInstanceLink
+08:20:58.876 INFO  - [ENV] Initializing AndroidDriver session...
+08:20:58.856 INFO  - ======================================================
+08:20:58.876 INFO  - [ENV] Starting test execution: testWhatsAnInstanceLink
+08:20:58.876 INFO  - [ENV] Initializing AndroidDriver session...
+08:20:58.856 INFO  - ======================================================
+08:20:58.878 INFO  - [ENV] Starting test execution: testWhatsAnInstanceLink
+08:20:58.879 INFO  - [ENV] Initializing AndroidDriver session...
+08:21:22.409 INFO  - [ENV] AndroidDriver session established successfully.
+08:21:23.482 INFO  - [TEST] Test started: testWhatsAnInstanceLink
+08:21:23.663 ERROR - [ASSERT-FAIL]The helper text link should be present on the UI. expected [true] but found [false]
