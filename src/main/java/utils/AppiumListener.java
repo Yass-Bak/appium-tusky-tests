@@ -7,6 +7,9 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.events.WebDriverListener;
 
+/**
+ * AppiumListener class to log test start, success, failure, and skipped events
+ */
 public class AppiumListener implements WebDriverListener {
 
     private static final Logger logger = LogManager.getLogger(AppiumListener.class);

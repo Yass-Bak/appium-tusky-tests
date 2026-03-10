@@ -6,6 +6,9 @@ import org.testng.annotations.ITestAnnotation;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 
+/**
+ * AnnotationTransformer class to transform annotations
+ */
 public class AnnotationTransformer implements IAnnotationTransformer {
     @Override
     public void transform(ITestAnnotation annotation, Class testClass, Constructor testConstructor, Method testMethod) {

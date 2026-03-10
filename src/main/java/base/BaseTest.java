@@ -12,6 +12,9 @@ import utils.TestListener;
 
 import java.time.Duration;
 
+/**
+ * BaseTest class to handle test setup and teardown
+ */
 @Listeners(TestListener.class)
 public class BaseTest {
     public static AndroidDriver androidDriver;

@@ -8,6 +8,9 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.Duration;
 
+/**
+ * DriverFactory class to create AndroidDriver session
+ */
 public class DriverFactory {
 
     public static AndroidDriver createAndroidDriver() {
@@ -44,8 +47,6 @@ public class DriverFactory {
     private static AppiumClientConfig getClientConfig() throws MalformedURLException {
         return AppiumClientConfig.defaultConfig()
                 .baseUrl(new URL("http://127.0.0.1:4723/"))
-                // Aggressive HTTP timeouts so the Java thread is killed instead of hanging
-                // forever
                 .readTimeout(Duration.ofMinutes(3))
                 .connectionTimeout(Duration.ofMinutes(1));
     }

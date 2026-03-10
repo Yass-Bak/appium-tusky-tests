@@ -3,11 +3,17 @@ package pages;
 import io.appium.java_client.AppiumBy;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import java.time.Duration;
 
+/**
+ * ServerSelectionPage class to handle server selection
+ */
 public class ServerSelectionPage {
     private final WebDriver driver;
 
-    // Locators extracted from the DOM Analysis
+    // Locators extracted from the DOM
     private final By serverDomainInput = AppiumBy.id("com.keylesspalace.tusky:id/domainEditText");
     private final By loginButton = AppiumBy.id("com.keylesspalace.tusky:id/loginButton");
     private final By whatsAnInstanceLink = AppiumBy.id("com.keylesspalace.tusky:id/whatsAnInstanceTextView");
@@ -34,6 +40,11 @@ public class ServerSelectionPage {
     // Assertions
     public boolean isServerInputVisible() {
         return !driver.findElements(serverDomainInput).isEmpty() && driver.findElement(serverDomainInput).isDisplayed();
+    }
+
+    public void waitForServerInputToDisappear() {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        wait.until(ExpectedConditions.invisibilityOfElementLocated(serverDomainInput));
     }
 
     public boolean isWhatsAnInstanceLinkVisible() {
