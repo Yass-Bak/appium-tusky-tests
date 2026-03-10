@@ -5,7 +5,7 @@
 
 
 ![Opening](Docs/1.jpg)
-This project is a high-performance, industrial-grade Mobile Automation Framework built for the **Tusky Mastodon** Android application. Designed with scalability and reliability in mind, it leverages a modern stack to provide robust UI validation across local and cloud environments.
+Mobile Automation Framework built for the **Tusky Mastodon** Android application. Designed with scalability and reliability in mind, it leverages a modern stack to provide robust UI validation across local and cloud environments.
 
 ---
 
