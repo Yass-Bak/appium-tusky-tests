@@ -1,0 +1,64 @@
+06:28:40.874 INFO  - ======================================================
+06:28:40.876 INFO  - [ENV] Starting test execution: testMoreOptionsMenu
+06:28:40.876 INFO  - [ENV] Initializing AndroidDriver session...
+06:28:59.708 INFO  - ======================================================
+06:28:59.709 INFO  - [ENV] Starting test execution: testMoreOptionsMenu
+06:28:59.709 INFO  - [ENV] Initializing AndroidDriver session...
+06:29:03.916 INFO  - ======================================================
+06:29:03.916 INFO  - [ENV] Starting test execution: testMoreOptionsMenu
+06:29:03.916 INFO  - [ENV] Initializing AndroidDriver session...
+06:29:04.790 INFO  - [ENV] AndroidDriver session established successfully.
+06:29:05.245 INFO  - [TEST] Test started: testMoreOptionsMenu
+06:29:05.308 INFO  - [ACTION] Looking for element using locator: AppiumBy.accessibilityId: More options
+06:29:05.777 INFO  - [ACTION] Found element using locator: AppiumBy.accessibilityId: More options
+06:29:06.133 INFO  - [ACTION] About to click on element: [[AndroidDriver:  on ANDROID (4170617f11715f80b92a4716107d90a8b3e007bf)] -> accessibility id: More options]
+06:29:07.484 INFO  - [ACTION] Clicked on element: Unknown Element
+06:29:07.934 INFO  - [ACTION] Looking for element using locator: By.xpath: //*[@text='Login with Browser']
+06:29:08.304 INFO  - [ACTION] Found element using locator: By.xpath: //*[@text='Login with Browser']
+06:29:09.549 INFO  - [TEST] Test passed: testMoreOptionsMenu
+06:29:09.558 INFO  - [ENV] Tearing down AndroidDriver session for test: testMoreOptionsMenu
+06:29:12.434 WARN  - Skipped Video Attachment (API < 27 devices do not support screen recording natively): An unknown error has occurred
+Build info: version: '4.13.0', revision: 'ba948ece5b*'
+System info: os.name: 'Linux', os.arch: 'amd64', os.version: '6.14.0-1017-azure', java.version: '17.0.18'
+Driver info: io.appium.java_client.android.AndroidDriver
+Command: [4170617f11715f80b92a4716107d90a8b3e007bf, stopRecordingScreen {}]
+Capabilities {appium:appActivity: com.keylesspalace.tusky.Mai..., appium:appPackage: com.keylesspalace.tusky, appium:automationName: uiautomator2, appium:bundleID: com.keylesspalace.tusky, appium:bundleId: com.keylesspalace.tusky, appium:chromedriverArgs: [--adb-port=5038], appium:chromedriverPorts: [[18100, 18110]], appium:databaseEnabled: false, appium:desired: {appActivity: com.keylesspalace.tusky.Mai..., appPackage: com.keylesspalace.tusky, automationName: uiautomator2, bstack:options: {buildIdentifier: #CI 22890077172, hostName: runnervm0kj6c, localIdentifier: Mar_10_0627_runnervm0kj6c_gr3i}, bundleID: com.keylesspalace.tusky, bundleId: com.keylesspalace.tusky, chromedriverArgs: [--adb-port=5038], chromedriverPorts: [[18100, 18110]], deviceName: oneplus 11r, disableSuppressAccessibilityService: true, goog:chromeOptions: {}, nativeWebScreenshot: true, newCommandTimeout: 0, platformName: Android, skipServerInstallation: true, systemPort: 8200, udid: 7f92d137}, appium:deviceApiLevel: 33, appium:deviceManufacturer: OnePlus, appium:deviceModel: CPH2487, appium:deviceName: 7f92d137, appium:deviceScreenDensity: 560, appium:deviceScreenSize: 1240x2772, appium:deviceUDID: 7f92d137, appium:disableSuppressAccessibilityService: true, appium:javascriptEnabled: true, appium:locationContextEnabled: false, appium:nativeWebScreenshot: true, appium:networkConnectionEnabled: true, appium:newCommandTimeout: 0, appium:optimalHubUrl: hub-euw.browserstack.com, appium:pixelRatio: 3.5, appium:platformVersion: 13, appium:skipServerInstallation: true, appium:statBarHeight: 110, appium:systemPort: 8200, appium:takesScreenshot: true, appium:udid: 7f92d137, appium:viewportRect: {height: 2398, left: 0, top: 110, width: 1240}, appium:warnings: {}, appium:webStorageEnabled: false, bstack:options: {buildIdentifier: #CI 22890077172, hostName: runnervm0kj6c, localIdentifier: Mar_10_0627_runnervm0kj6c_gr3i}, goog:chromeOptions: {}, platformName: ANDROID}
+Session ID: 4170617f11715f80b92a4716107d90a8b3e007bf
+06:29:13.305 INFO  - [ENV] AndroidDriver successfully closed.
+06:29:13.305 INFO  - ======================================================
+06:29:31.057 INFO  - [ENV] AndroidDriver session established successfully.
+06:29:31.221 INFO  - [TEST] Test started: testMoreOptionsMenu
+06:29:31.288 INFO  - [ACTION] Looking for element using locator: AppiumBy.accessibilityId: More options
+06:29:32.364 INFO  - [ACTION] Found element using locator: AppiumBy.accessibilityId: More options
+06:29:32.447 INFO  - [ACTION] About to click on element: [[AndroidDriver:  on ANDROID (b17178ab5973ebaee750ca205bd7d199f2aa51b0)] -> accessibility id: More options]
+06:29:33.502 INFO  - [ACTION] Clicked on element: Unknown Element
+06:29:34.121 INFO  - [ACTION] Looking for element using locator: By.xpath: //*[@text='Login with Browser']
+06:29:34.284 INFO  - [ACTION] Found element using locator: By.xpath: //*[@text='Login with Browser']
+06:29:35.450 INFO  - [TEST] Test passed: testMoreOptionsMenu
+06:29:35.459 INFO  - [ENV] Tearing down AndroidDriver session for test: testMoreOptionsMenu
+06:29:36.382 WARN  - Skipped Video Attachment (API < 27 devices do not support screen recording natively): An unknown error has occurred
+Build info: version: '4.13.0', revision: 'ba948ece5b*'
+System info: os.name: 'Linux', os.arch: 'amd64', os.version: '6.14.0-1017-azure', java.version: '17.0.18'
+Driver info: io.appium.java_client.android.AndroidDriver
+Command: [b17178ab5973ebaee750ca205bd7d199f2aa51b0, stopRecordingScreen {}]
+Capabilities {appium:appActivity: com.keylesspalace.tusky.Mai..., appium:appPackage: com.keylesspalace.tusky, appium:automationName: uiautomator2, appium:bundleID: com.keylesspalace.tusky, appium:bundleId: com.keylesspalace.tusky, appium:chromedriverPorts: [[18122, 18132]], appium:databaseEnabled: false, appium:desired: {appActivity: com.keylesspalace.tusky.Mai..., appPackage: com.keylesspalace.tusky, automationName: uiautomator2, bstack:options: {buildIdentifier: #CI 22890077172, hostName: runnervm0kj6c, localIdentifier: Mar_10_0627_runnervm0kj6c_gr3i}, bundleID: com.keylesspalace.tusky, bundleId: com.keylesspalace.tusky, chromedriverPorts: [[18122, 18132]], deviceName: google pixel 8 pro, disableSuppressAccessibilityService: true, goog:chromeOptions: {}, nativeWebScreenshot: true, newCommandTimeout: 0, platformName: Android, skipServerInstallation: true, systemPort: 8202, udid: 38060DLJG000P2}, appium:deviceApiLevel: 34, appium:deviceManufacturer: Google, appium:deviceModel: Pixel 8 Pro, appium:deviceName: 38060DLJG000P2, appium:deviceScreenDensity: 360, appium:deviceScreenSize: 1008x2244, appium:deviceUDID: 38060DLJG000P2, appium:disableSuppressAccessibilityService: true, appium:javascriptEnabled: true, appium:locationContextEnabled: false, appium:nativeWebScreenshot: true, appium:networkConnectionEnabled: true, appium:newCommandTimeout: 0, appium:optimalHubUrl: hub-usw.browserstack.com, appium:pixelRatio: 2.25, appium:platformVersion: 14, appium:skipServerInstallation: true, appium:statBarHeight: 151, appium:systemPort: 8202, appium:takesScreenshot: true, appium:udid: 38060DLJG000P2, appium:viewportRect: {height: 1926, left: 0, top: 151, width: 1008}, appium:warnings: {}, appium:webStorageEnabled: false, bstack:options: {buildIdentifier: #CI 22890077172, hostName: runnervm0kj6c, localIdentifier: Mar_10_0627_runnervm0kj6c_gr3i}, goog:chromeOptions: {}, platformName: ANDROID}
+Session ID: b17178ab5973ebaee750ca205bd7d199f2aa51b0
+06:29:37.381 INFO  - [ENV] AndroidDriver session established successfully.
+06:29:37.503 INFO  - [TEST] Test started: testMoreOptionsMenu
+06:29:37.552 INFO  - [ENV] AndroidDriver successfully closed.
+06:29:37.553 INFO  - ======================================================
+06:29:37.565 INFO  - [ACTION] Looking for element using locator: AppiumBy.accessibilityId: More options
+06:29:38.295 INFO  - [ACTION] Found element using locator: AppiumBy.accessibilityId: More options
+06:29:38.392 INFO  - [ACTION] About to click on element: [[AndroidDriver:  on ANDROID (fa1822db4fe37f1c708310f71b3d816073e387fb)] -> accessibility id: More options]
+06:29:39.567 INFO  - [ACTION] Clicked on element: Unknown Element
+06:29:39.885 INFO  - [ACTION] Looking for element using locator: By.xpath: //*[@text='Login with Browser']
+06:29:39.995 INFO  - [ACTION] Found element using locator: By.xpath: //*[@text='Login with Browser']
+06:29:40.868 INFO  - [TEST] Test passed: testMoreOptionsMenu
+06:29:40.878 INFO  - [ENV] Tearing down AndroidDriver session for test: testMoreOptionsMenu
+06:29:41.845 WARN  - Skipped Video Attachment (API < 27 devices do not support screen recording natively): An unknown error has occurred
+Build info: version: '4.13.0', revision: 'ba948ece5b*'
+System info: os.name: 'Linux', os.arch: 'amd64', os.version: '6.14.0-1017-azure', java.version: '17.0.18'
+Driver info: io.appium.java_client.android.AndroidDriver
+Command: [fa1822db4fe37f1c708310f71b3d816073e387fb, stopRecordingScreen {}]
+Capabilities {appium:appActivity: com.keylesspalace.tusky.Mai..., appium:appPackage: com.keylesspalace.tusky, appium:automationName: uiautomator2, appium:bundleID: com.keylesspalace.tusky, appium:bundleId: com.keylesspalace.tusky, appium:chromedriverPorts: [[18133, 18143]], appium:databaseEnabled: false, appium:desired: {appActivity: com.keylesspalace.tusky.Mai..., appPackage: com.keylesspalace.tusky, automationName: uiautomator2, bstack:options: {buildIdentifier: #CI 22890077172, hostName: runnervm0kj6c, localIdentifier: Mar_10_0627_runnervm0kj6c_gr3i}, bundleID: com.keylesspalace.tusky, bundleId: com.keylesspalace.tusky, chromedriverPorts: [[18133, 18143]], deviceName: samsung galaxy s22 ultra, disableSuppressAccessibilityService: true, goog:chromeOptions: {}, nativeWebScreenshot: true, newCommandTimeout: 0, platformName: Android, skipServerInstallation: true, systemPort: 8203, udid: R3CT40BR7YK}, appium:deviceApiLevel: 31, appium:deviceManufacturer: samsung, appium:deviceModel: SM-S908B, appium:deviceName: R3CT40BR7YK, appium:deviceScreenDensity: 450, appium:deviceScreenSize: 1080x2316, appium:deviceUDID: R3CT40BR7YK, appium:disableSuppressAccessibilityService: true, appium:javascriptEnabled: true, appium:locationContextEnabled: false, appium:nativeWebScreenshot: true, appium:networkConnectionEnabled: true, appium:newCommandTimeout: 0, appium:optimalHubUrl: hub-usw.browserstack.com, appium:pixelRatio: 2.8125, appium:platformVersion: 12, appium:skipServerInstallation: true, appium:statBarHeight: 75, appium:systemPort: 8203, appium:takesScreenshot: true, appium:udid: R3CT40BR7YK, appium:viewportRect: {height: 2031, left: 0, top: 75, width: 1080}, appium:warnings: {}, appium:webStorageEnabled: false, bstack:options: {buildIdentifier: #CI 22890077172, hostName: runnervm0kj6c, localIdentifier: Mar_10_0627_runnervm0kj6c_gr3i}, goog:chromeOptions: {}, platformName: ANDROID}
+Session ID: fa1822db4fe37f1c708310f71b3d816073e387fb
