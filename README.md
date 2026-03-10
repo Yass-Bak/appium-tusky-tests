@@ -82,7 +82,7 @@ mvn clean test -P bstack -Denv=browserstack
 ---
 
 ## 📬 Contact & Contributions
-For any questions regarding the framework architecture or contribution guidelines, please reach out to the maintainers.
+For any questions regarding the framework architecture or contribution guidelines, please feel free to reach me.
 
 ---
 *Built with ❤️ and 🚬☕ for the mobile automation community.*
